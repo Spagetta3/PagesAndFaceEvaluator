@@ -1,0 +1,19 @@
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+x64/
+build/
+bld/
+BasicSamples/
+PositiveSamples/
+NegativeSamples/
+[Bb]in/
+[Oo]bj/ 
+
+*.mp3
