@@ -5,29 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Nancy;
 using Nancy.Hosting.Self;
+using Nancy.ModelBinding;
 using System.Net.Sockets;
 
 namespace PagesAndFaceEvaluator
 {
     public class TabActionModule : NancyModule
     {
+        public class ReceivedData
+        {
+            public string Data { get; set; }
+        }
+
         public TabActionModule()
         {
-            Get["/tabChanged"] = _ =>
-        {
-            /*zavolat funkciu na parsovanie, ulozenie a vratit ok....*/
-            return "Ide to";
-        };
 
-        Get["/tabNew"] = _ =>
-        {
-            return HttpStatusCode.OK;
-        };
-
-        Get["/tabClosed"] = _ =>
-        {
-            return HttpStatusCode.OK;
-        };
+            Post["/processTabData"] = _ =>
+            {
+                /*zavolat funkc\iu na parsovanie, ulozenie a vratit ok....*/
+                ReceivedData data = this.Bind<ReceivedData>();
+                if (data.Data != null)
+                {
+                    return HttpStatusCode.OK;
+                }
+                else
+                    return HttpStatusCode.InternalServerError;
+            };
         }
     }
 }
