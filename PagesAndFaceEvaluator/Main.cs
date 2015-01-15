@@ -13,6 +13,9 @@ using Emgu.CV.UI;
 using Emgu.CV.GPU;
 using Emgu.CV.CvEnum;
 using System.IO;
+using Nancy;
+using Nancy.Hosting.Self;
+using System.Net.Sockets;
 
 namespace PagesAndFaceEvaluator
 {
@@ -23,7 +26,12 @@ namespace PagesAndFaceEvaluator
 
         public Main()
         {
+            // run netsh.exe as admin and add: netsh http add urlacl url=http://+:8799/ user=Everyone
+            NancyHost host;
             InitializeComponent();
+            string URL = "http://localhost:8799";
+            host = new NancyHost(new Uri(URL));
+            host.Start();
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -127,11 +135,23 @@ namespace PagesAndFaceEvaluator
                return image; 
         }
 
-        private void stopButton_Click(object sender, EventArgs e)
+        private void StopButton_Click(object sender, EventArgs e)
         {
             ReleaseData();
             this.Close();
             Application.Exit();
+        }
+    }
+
+    public class MainMod: NancyModule
+    {
+        public MainMod()
+        {
+            Get["/"] = x =>
+            {
+                return "Server is running...";
+            };
+
         }
     }
 }
