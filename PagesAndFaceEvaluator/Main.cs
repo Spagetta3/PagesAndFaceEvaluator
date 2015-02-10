@@ -83,8 +83,8 @@ namespace PagesAndFaceEvaluator
                 foreach (Rectangle face in faces)
                     image.Draw(face, new Bgr(Color.Red), 2);
 
-                //foreach (Rectangle eye in eyes)
-                //    image.Draw(eye, new Bgr(Color.Blue), 2);
+                foreach (Rectangle eye in eyes)
+                    image.Draw(eye, new Bgr(Color.Blue), 2);
                 
                return image; 
         }
