@@ -39,52 +39,6 @@ namespace PagesAndFaceEvaluator
 
         }
 
-        private void GenerateSamplesButton_Click(object sender, EventArgs e)
-        {
-            Capture cap = new Capture(0);
-            int counter = 162;
-            string path = null;
-            for (; ; )
-            {
-                bool positive = false;
-
-                using (Image<Bgr, byte> nextFrame = cap.QueryFrame())
-                {
-                    if (nextFrame != null)
-                    {
-                        Image<Bgr, Byte> image = cap.QueryFrame(); //Read the files as an 8-bit Bgr image  
-                        long detectionTime;
-                        List<Rectangle> faces = new List<Rectangle>();
-                        List<Rectangle> eyes = new List<Rectangle>();
-                        DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes, out detectionTime);
-                        path = @"D:\Programming\Visual Studio 2013\Projects\PagesAndFaceEvaluator\PagesAndFaceEvaluator\BasicSamples\" + counter.ToString() + ".png";
-                        image.Save(path);
-
-                        foreach (Rectangle face in faces)
-                        {
-                            positive = true;
-                            image.Draw(face, new Bgr(Color.Red), 2);
-
-                        }
-                        foreach (Rectangle eye in eyes)
-                            image.Draw(eye, new Bgr(Color.Blue), 2);
-
-                        if (positive)
-                        {
-                            path = @"D:\Programming\Visual Studio 2013\Projects\PagesAndFaceEvaluator\PagesAndFaceEvaluator\PositiveSamples\" + counter.ToString() + ".png";
-                            image.Save(path);
-                        }
-                        else
-                        {
-                            path = @"D:\Programming\Visual Studio 2013\Projects\PagesAndFaceEvaluator\PagesAndFaceEvaluator\NegativeSamples\" + counter.ToString() + ".png";
-                            image.Save(path);
-                        }
-                        counter++;
-                    }
-                }
-            }
-        }
-
         private void ProcessFrame(object sender, EventArgs arg)
         {
             Image<Bgr, Byte> imageFrame = DetectFaceInImageFrame(capture.QueryFrame());

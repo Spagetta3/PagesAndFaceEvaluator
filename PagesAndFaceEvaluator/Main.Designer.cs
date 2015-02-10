@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.camImageBox = new Emgu.CV.UI.ImageBox();
-            this.generateSamplesButton = new System.Windows.Forms.Button();
             this.startAnalyzeButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
@@ -43,16 +42,6 @@
             this.camImageBox.Size = new System.Drawing.Size(693, 374);
             this.camImageBox.TabIndex = 2;
             this.camImageBox.TabStop = false;
-            // 
-            // generateSamplesButton
-            // 
-            this.generateSamplesButton.Location = new System.Drawing.Point(419, 402);
-            this.generateSamplesButton.Name = "generateSamplesButton";
-            this.generateSamplesButton.Size = new System.Drawing.Size(114, 23);
-            this.generateSamplesButton.TabIndex = 3;
-            this.generateSamplesButton.Text = "Generate Samples";
-            this.generateSamplesButton.UseVisualStyleBackColor = true;
-            this.generateSamplesButton.Click += new System.EventHandler(this.GenerateSamplesButton_Click);
             // 
             // startAnalyzeButton
             // 
@@ -81,7 +70,6 @@
             this.ClientSize = new System.Drawing.Size(731, 459);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.startAnalyzeButton);
-            this.Controls.Add(this.generateSamplesButton);
             this.Controls.Add(this.camImageBox);
             this.Name = "Main";
             this.Text = "Pages and Face evaluator";
@@ -94,7 +82,6 @@
         #endregion
 
         private Emgu.CV.UI.ImageBox camImageBox;
-        private System.Windows.Forms.Button generateSamplesButton;
         private System.Windows.Forms.Button startAnalyzeButton;
         private System.Windows.Forms.Button stopButton;
     }
