@@ -75,10 +75,9 @@ namespace PagesAndFaceEvaluator
 
         private Image<Bgr, Byte> DetectFaceInImageFrame(Image<Bgr, Byte> image)
         {
-                long detectionTime;
                 List<Rectangle> faces = new List<Rectangle>();
                 List<Rectangle> eyes = new List<Rectangle>();
-                DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes, out detectionTime);
+                DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
 
                 foreach (Rectangle face in faces)
                     image.Draw(face, new Bgr(Color.Red), 2);

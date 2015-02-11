@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -14,16 +13,13 @@ namespace PagesAndFaceEvaluator
 {
     public static class DetectFace
     {
-        public static void Detect(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, List<Rectangle> faces, List<Rectangle> eyes, out long detectionTime)
+        public static void Detect(Image<Bgr, Byte> image, String faceFileName, String eyeFileName, List<Rectangle> faces, List<Rectangle> eyes)
         {
-            Stopwatch watch;
-
             if (GpuInvoke.HasCuda)
             {
                 using (GpuCascadeClassifier face = new GpuCascadeClassifier(faceFileName))
                 using (GpuCascadeClassifier eye = new GpuCascadeClassifier(eyeFileName))
                 {
-                    watch = Stopwatch.StartNew();
                     using (GpuImage<Bgr, Byte> gpuImage = new GpuImage<Bgr, byte>(image))
                     using (GpuImage<Gray, Byte> gpuGray = gpuImage.Convert<Gray, Byte>())
                     {
@@ -49,7 +45,6 @@ namespace PagesAndFaceEvaluator
                             }
                         }
                     }
-                    watch.Stop();
                 }
             }
             else
@@ -58,7 +53,6 @@ namespace PagesAndFaceEvaluator
                 using (CascadeClassifier face = new CascadeClassifier(faceFileName))
                 using (CascadeClassifier eye = new CascadeClassifier(eyeFileName))
                 {
-                    watch = Stopwatch.StartNew();
                     using (Image<Gray, Byte> gray = image.Convert<Gray, Byte>()) //Convert it to Grayscale
                     {
                         //normalizes brightness and increases contrast of the image
@@ -95,10 +89,8 @@ namespace PagesAndFaceEvaluator
                             }
                         }
                     }
-                    watch.Stop();
                 }
             }
-            detectionTime = watch.ElapsedMilliseconds;
         }
     }
 }
