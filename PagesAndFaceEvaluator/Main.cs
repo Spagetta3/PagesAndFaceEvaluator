@@ -51,7 +51,7 @@ namespace PagesAndFaceEvaluator
                 capture.Dispose();
         }
 
-        private void StartAnalyzeButton_Click(object sender, EventArgs e)
+        private void StartAnalyze()
         {
             if (capture == null)
             {
