@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,7 +23,14 @@ namespace PagesAndFaceEvaluator
     public partial class Main : Form
     {
         private Capture capture;
-        private bool captureInProgress; 
+        private bool captureInProgress;
+        private Stopwatch watchFace;
+        private Stopwatch watchEyes;
+        private bool faceDetected;
+        private bool eyesDetected;
+        private bool firstDetectionOfFace;
+        private bool firstDetectionOfEyes;
+        private Stopwatch wholeTime;
 
         public Main()
         {
@@ -32,6 +40,11 @@ namespace PagesAndFaceEvaluator
             string URL = "http://localhost:8799";
             host = new NancyHost(new Uri(URL));
             host.Start();
+            faceDetected = false;
+            eyesDetected = false;
+            firstDetectionOfFace = true;
+            firstDetectionOfEyes = true;
+            StartAnalyze();
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -41,8 +54,7 @@ namespace PagesAndFaceEvaluator
 
         private void ProcessFrame(object sender, EventArgs arg)
         {
-            Image<Bgr, Byte> imageFrame = DetectFaceInImageFrame(capture.QueryFrame());
-            camImageBox.Image = imageFrame;        
+            DetectFaceInImageFrame(capture.QueryFrame());       
         }
 
         private void ReleaseData()
@@ -53,6 +65,7 @@ namespace PagesAndFaceEvaluator
 
         private void StartAnalyze()
         {
+            wholeTime = Stopwatch.StartNew();
             if (capture == null)
             {
                 try
@@ -73,24 +86,70 @@ namespace PagesAndFaceEvaluator
             }
         }
 
-        private Image<Bgr, Byte> DetectFaceInImageFrame(Image<Bgr, Byte> image)
+        private void DetectFaceInImageFrame(Image<Bgr, Byte> image)
         {
                 List<Rectangle> faces = new List<Rectangle>();
                 List<Rectangle> eyes = new List<Rectangle>();
                 DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
 
-                foreach (Rectangle face in faces)
-                    image.Draw(face, new Bgr(Color.Red), 2);
+                if (faces.Count == 0 && faceDetected == true)
+                {
+                    watchFace.Stop();
+                    faceDetected = false;
+                }
+                else if (faces.Count != 0 && faceDetected == false)
+                {
+                    if (firstDetectionOfFace)
+                    {
+                        watchFace = Stopwatch.StartNew();
+                        firstDetectionOfFace = false;
+                    }
+                    else
+                        watchFace.Start();
+                    faceDetected = true;
+                }
 
-                foreach (Rectangle eye in eyes)
-                    image.Draw(eye, new Bgr(Color.Blue), 2);
+                if (eyes.Count == 0 && eyesDetected == true)
+                {
+                    watchEyes.Stop();
+                    eyesDetected = false;
+                }
+                else if (eyes.Count != 0 && eyesDetected == false)
+                {
+                    if (firstDetectionOfEyes)
+                    {
+                        watchEyes = Stopwatch.StartNew();
+                        firstDetectionOfEyes = false;
+                    }
+                    else
+                        watchEyes.Start();
+                    eyesDetected = true;
+                }
+
+                //foreach (Rectangle face in faces)
+                //    image.Draw(face, new Bgr(Color.Red), 2);
+
+                //foreach (Rectangle eye in eyes)
+                //    image.Draw(eye, new Bgr(Color.Blue), 2);
                 
-               return image; 
+               return; 
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
             ReleaseData();
+
+            watchFace.Stop();
+            watchEyes.Stop();
+            wholeTime.Stop();
+
+            string path = @"D:\Programming\Visual Studio 2013\Projects\PagesAndFaceEvaluator\PagesAndFaceEvaluator\statistics\times.txt";
+            string rowToWrite = "Face: " + watchFace.ElapsedMilliseconds.ToString() + " ms; Eyes: " + watchEyes.ElapsedMilliseconds.ToString() + " ms; Whole Time: " + wholeTime.ElapsedMilliseconds.ToString() + " ms;";
+            using (StreamWriter w = File.AppendText(path))
+            {
+                w.WriteLine(rowToWrite);
+                w.Flush();
+            }
             this.Close();
             Application.Exit();
         }

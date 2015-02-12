@@ -20,7 +20,6 @@ namespace PagesAndFaceEvaluator
 
         public TabActionModule()
         {
-
             Post["/processTabData"] = _ =>
             {
                 ReceivedData data = this.Bind<ReceivedData>();
