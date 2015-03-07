@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="DetectFace.cs" />
     <Compile Include="ConfigHelper.cs" />
+    <Compile Include="LogsActionModule.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
