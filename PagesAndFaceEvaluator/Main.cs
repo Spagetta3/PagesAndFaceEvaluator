@@ -17,11 +17,16 @@ using System.IO;
 using Nancy;
 using Nancy.Hosting.Self;
 using System.Net.Sockets;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace PagesAndFaceEvaluator
 {
     public partial class Main : Form
     {
+        private Timer tmr;
+        private object processFrameMutex;
+        private bool frameProcessing = false;
         private Capture capture;
         private bool captureInProgress;
         private Stopwatch watchFace;
@@ -52,9 +57,9 @@ namespace PagesAndFaceEvaluator
 
         }
 
-        private void ProcessFrame(object sender, EventArgs arg)
+        private void ProcessFrame()
         {
-            DetectFaceInImageFrame(capture.QueryFrame());       
+            DetectFaceInImageFrame(capture.QueryFrame());
         }
 
         private void ReleaseData()
@@ -77,12 +82,31 @@ namespace PagesAndFaceEvaluator
 
             if (capture != null)
             {
-                if (captureInProgress)
-                    Application.Idle -= ProcessFrame;
-                else  
-                    Application.Idle += ProcessFrame;
+                processFrameMutex = new object();
+                frameProcessing = false;
 
-                captureInProgress = !captureInProgress;
+                tmr = new Timer();
+                tmr.Interval = 1000;
+                tmr.Elapsed += TimerElapsed;
+                tmr.Start();
+            }
+        }
+
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (processFrameMutex)
+            {
+                if (!frameProcessing)
+                    frameProcessing = true;
+                else
+                    return;
+            }
+
+            ProcessFrame();
+
+            lock (processFrameMutex)
+            {
+                frameProcessing = false;
             }
         }
 
