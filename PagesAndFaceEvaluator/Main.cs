@@ -13,7 +13,6 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.CV.GPU;
 using Emgu.CV.CvEnum;
-using System.IO;
 using Nancy;
 using Nancy.Hosting.Self;
 using System.Net.Sockets;
@@ -27,15 +26,9 @@ namespace PagesAndFaceEvaluator
         private Timer tmr;
         private object processFrameMutex;
         private bool frameProcessing = false;
+
         private Capture capture;
-        private bool captureInProgress;
-        private Stopwatch watchFace;
-        private Stopwatch watchEyes;
-        private bool faceDetected;
-        private bool eyesDetected;
-        private bool firstDetectionOfFace;
-        private bool firstDetectionOfEyes;
-        private Stopwatch wholeTime;
+        
 
         public Main()
         {
@@ -45,10 +38,12 @@ namespace PagesAndFaceEvaluator
             string URL = "http://localhost:8799";
             host = new NancyHost(new Uri(URL));
             host.Start();
-            faceDetected = false;
-            eyesDetected = false;
-            firstDetectionOfFace = true;
-            firstDetectionOfEyes = true;
+
+            Statistics.Initialize();
+            Statistics.Instance.FaceDetected = false;
+            Statistics.Instance.EyesDetected = false;
+            Statistics.Instance.FirstDetectionOfFace = true;
+            Statistics.Instance.FirstDetectionOfEyes = true;
             StartAnalyze();
         }
 
@@ -70,7 +65,6 @@ namespace PagesAndFaceEvaluator
 
         private void StartAnalyze()
         {
-            wholeTime = Stopwatch.StartNew();
             if (capture == null)
             {
                 try
@@ -116,45 +110,13 @@ namespace PagesAndFaceEvaluator
                 List<Rectangle> eyes = new List<Rectangle>();
                 DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
 
-                if (faces.Count == 0 && faceDetected == true)
-                {
-                    watchFace.Stop();
-                    faceDetected = false;
-                }
-                else if (faces.Count != 0 && faceDetected == false)
-                {
-                    if (firstDetectionOfFace)
-                    {
-                        watchFace = Stopwatch.StartNew();
-                        firstDetectionOfFace = false;
-                    }
-                    else
-                        watchFace.Start();
-                    faceDetected = true;
-                }
-
-                if (eyes.Count == 0 && eyesDetected == true)
-                {
-                    watchEyes.Stop();
-                    eyesDetected = false;
-                }
-                else if (eyes.Count != 0 && eyesDetected == false)
-                {
-                    if (firstDetectionOfEyes)
-                    {
-                        watchEyes = Stopwatch.StartNew();
-                        firstDetectionOfEyes = false;
-                    }
-                    else
-                        watchEyes.Start();
-                    eyesDetected = true;
-                }
 
                 //foreach (Rectangle face in faces)
                 //    image.Draw(face, new Bgr(Color.Red), 2);
 
                 //foreach (Rectangle eye in eyes)
                 //    image.Draw(eye, new Bgr(Color.Blue), 2);
+                Statistics.Instance.AnalyzeDetectedFaceAndEyes(faces, eyes);
                 
                return; 
         }
@@ -162,20 +124,17 @@ namespace PagesAndFaceEvaluator
         private void StopButton_Click(object sender, EventArgs e)
         {
             ReleaseData();
-
-            watchFace.Stop();
-            watchEyes.Stop();
-            wholeTime.Stop();
-
-            string path = @"D:\Programming\Visual Studio 2013\Projects\PagesAndFaceEvaluator\PagesAndFaceEvaluator\statistics\times.txt";
-            string rowToWrite = "Face: " + watchFace.ElapsedMilliseconds.ToString() + " ms; Eyes: " + watchEyes.ElapsedMilliseconds.ToString() + " ms; Whole Time: " + wholeTime.ElapsedMilliseconds.ToString() + " ms;";
-            using (StreamWriter w = File.AppendText(path))
-            {
-                w.WriteLine(rowToWrite);
-                w.Flush();
-            }
+            //ak vypne program a chybaju tabData, tak to treba osetrit, ze sa to nestrati, ale ulozi sa to...
+            //Statistics.Instance.WriteToFileData();
             this.Close();
             Application.Exit();
+        }
+
+        private void WriteLine(string s)
+        {
+            outTextBox.Text += s + "\r\n";
+            outTextBox.SelectionStart = outTextBox.Text.Length;
+            outTextBox.ScrollToCaret();
         }
     }
 
