@@ -30,7 +30,6 @@ namespace PagesAndFaceEvaluator
 
         private Capture capture;
         
-
         public Main()
         {
             string AID = ConfigHelper.GetValue(ConfigHelper.ConfigKey.AID.ToString());
@@ -146,7 +145,16 @@ namespace PagesAndFaceEvaluator
 
         private void startAnalyzeButton_Click(object sender, EventArgs e)
         {
+            cameraSettingsButton.Enabled = false;
             StartAnalyze();
+        }
+
+        private void cameraSettingsButton_Click(object sender, EventArgs e)
+        {
+            using (CameraSettingsForm csw = new CameraSettingsForm())
+            {
+                csw.ShowDialog();
+            }
         }
     }
 

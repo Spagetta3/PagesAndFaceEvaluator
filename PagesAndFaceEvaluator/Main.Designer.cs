@@ -83,6 +83,7 @@
             this.cameraSettingsButton.TabIndex = 9;
             this.cameraSettingsButton.Text = "Nastavenie kamery";
             this.cameraSettingsButton.UseVisualStyleBackColor = true;
+            this.cameraSettingsButton.Click += new System.EventHandler(this.cameraSettingsButton_Click);
             // 
             // statisticTextBox
             // 
