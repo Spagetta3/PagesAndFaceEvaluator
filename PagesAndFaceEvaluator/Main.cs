@@ -48,6 +48,8 @@ namespace PagesAndFaceEvaluator
                 }
             }
 
+            ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.LastPath.ToString(), "");
+
             // run netsh.exe as admin and add: netsh http add urlacl url=http://+:8799/ user=Everyone
             NancyHost host;
             
