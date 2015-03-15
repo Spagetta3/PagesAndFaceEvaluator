@@ -56,7 +56,6 @@ namespace PagesAndFaceEvaluator
             Statistics.Instance.EyesDetected = false;
             Statistics.Instance.FirstDetectionOfFace = true;
             Statistics.Instance.FirstDetectionOfEyes = true;
-            StartAnalyze();
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -142,6 +141,11 @@ namespace PagesAndFaceEvaluator
             //Statistics.Instance.WriteToFileData();
             this.Close();
             Application.Exit();
+        }
+
+        private void startAnalyzeButton_Click(object sender, EventArgs e)
+        {
+            StartAnalyze();
         }
     }
 

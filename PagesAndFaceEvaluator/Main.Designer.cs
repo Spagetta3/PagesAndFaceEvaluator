@@ -73,6 +73,7 @@
             this.startAnalyzeButton.TabIndex = 8;
             this.startAnalyzeButton.Text = "Začni experiment";
             this.startAnalyzeButton.UseVisualStyleBackColor = true;
+            this.startAnalyzeButton.Click += new System.EventHandler(this.startAnalyzeButton_Click);
             // 
             // cameraSettingsButton
             // 
