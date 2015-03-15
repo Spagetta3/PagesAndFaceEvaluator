@@ -33,11 +33,13 @@
             this.wholeStatisticsLabel = new System.Windows.Forms.Label();
             this.startAnalyzeButton = new System.Windows.Forms.Button();
             this.cameraSettingsButton = new System.Windows.Forms.Button();
+            this.statisticTextBox = new System.Windows.Forms.TextBox();
+            this.wholeStatisticsTextBox = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // stopButton
             // 
-            this.stopButton.Location = new System.Drawing.Point(137, 212);
+            this.stopButton.Location = new System.Drawing.Point(137, 145);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(75, 23);
             this.stopButton.TabIndex = 5;
@@ -48,7 +50,7 @@
             // statisticLabel
             // 
             this.statisticLabel.AutoSize = true;
-            this.statisticLabel.Location = new System.Drawing.Point(22, 32);
+            this.statisticLabel.Location = new System.Drawing.Point(22, 23);
             this.statisticLabel.Name = "statisticLabel";
             this.statisticLabel.Size = new System.Drawing.Size(102, 13);
             this.statisticLabel.TabIndex = 6;
@@ -57,7 +59,7 @@
             // wholeStatisticsLabel
             // 
             this.wholeStatisticsLabel.AutoSize = true;
-            this.wholeStatisticsLabel.Location = new System.Drawing.Point(22, 60);
+            this.wholeStatisticsLabel.Location = new System.Drawing.Point(22, 51);
             this.wholeStatisticsLabel.Name = "wholeStatisticsLabel";
             this.wholeStatisticsLabel.Size = new System.Drawing.Size(124, 13);
             this.wholeStatisticsLabel.TabIndex = 7;
@@ -65,7 +67,7 @@
             // 
             // startAnalyzeButton
             // 
-            this.startAnalyzeButton.Location = new System.Drawing.Point(25, 212);
+            this.startAnalyzeButton.Location = new System.Drawing.Point(25, 145);
             this.startAnalyzeButton.Name = "startAnalyzeButton";
             this.startAnalyzeButton.Size = new System.Drawing.Size(111, 23);
             this.startAnalyzeButton.TabIndex = 8;
@@ -74,19 +76,35 @@
             // 
             // cameraSettingsButton
             // 
-            this.cameraSettingsButton.Location = new System.Drawing.Point(25, 180);
+            this.cameraSettingsButton.Location = new System.Drawing.Point(25, 113);
             this.cameraSettingsButton.Name = "cameraSettingsButton";
             this.cameraSettingsButton.Size = new System.Drawing.Size(111, 23);
             this.cameraSettingsButton.TabIndex = 9;
             this.cameraSettingsButton.Text = "Nastavenie kamery";
             this.cameraSettingsButton.UseVisualStyleBackColor = true;
             // 
+            // statisticTextBox
+            // 
+            this.statisticTextBox.Location = new System.Drawing.Point(153, 16);
+            this.statisticTextBox.Name = "statisticTextBox";
+            this.statisticTextBox.Size = new System.Drawing.Size(88, 20);
+            this.statisticTextBox.TabIndex = 10;
+            // 
+            // wholeStatisticsTextBox
+            // 
+            this.wholeStatisticsTextBox.Location = new System.Drawing.Point(153, 43);
+            this.wholeStatisticsTextBox.Name = "wholeStatisticsTextBox";
+            this.wholeStatisticsTextBox.Size = new System.Drawing.Size(88, 20);
+            this.wholeStatisticsTextBox.TabIndex = 11;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(237, 247);
+            this.ClientSize = new System.Drawing.Size(255, 182);
             this.ControlBox = false;
+            this.Controls.Add(this.wholeStatisticsTextBox);
+            this.Controls.Add(this.statisticTextBox);
             this.Controls.Add(this.cameraSettingsButton);
             this.Controls.Add(this.startAnalyzeButton);
             this.Controls.Add(this.wholeStatisticsLabel);
@@ -107,6 +125,8 @@
         private System.Windows.Forms.Label wholeStatisticsLabel;
         private System.Windows.Forms.Button startAnalyzeButton;
         private System.Windows.Forms.Button cameraSettingsButton;
+        private System.Windows.Forms.TextBox statisticTextBox;
+        private System.Windows.Forms.TextBox wholeStatisticsTextBox;
     }
 }
 
