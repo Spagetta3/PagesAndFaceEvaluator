@@ -11,7 +11,7 @@ namespace PagesAndFaceEvaluator
     {
         public enum ConfigKey
         {
-            LastPath, AID
+            LastPath, AID, WholeTime
         }
 
         public static string GetValue(string key)

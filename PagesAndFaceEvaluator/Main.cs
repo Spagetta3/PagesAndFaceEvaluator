@@ -27,6 +27,11 @@ namespace PagesAndFaceEvaluator
         private object processFrameMutex;
         private bool frameProcessing = false;
         bool close = false;
+        
+        private DateTime wholeTime;
+        private bool analyzeStarted = false;
+        private DateTime timeToday;
+        private int counter = 0;
 
         private Capture capture;
         
@@ -45,6 +50,7 @@ namespace PagesAndFaceEvaluator
 
             // run netsh.exe as admin and add: netsh http add urlacl url=http://+:8799/ user=Everyone
             NancyHost host;
+            
             InitializeComponent();
             string URL = "http://localhost:8799";
             host = new NancyHost(new Uri(URL));
@@ -61,6 +67,13 @@ namespace PagesAndFaceEvaluator
         {
             if (close)
                 this.Close();
+            string previousTime = ConfigHelper.GetValue(ConfigHelper.ConfigKey.WholeTime.ToString());
+            if (previousTime != "")
+                previousTime += " s";
+            else
+                previousTime = "0 s";
+            this.wholeStatisticsTextBox.Text = previousTime;
+            this.statisticTextBox.Text = "0 s";
             return;
         }
 
@@ -77,6 +90,9 @@ namespace PagesAndFaceEvaluator
 
         private void StartAnalyze()
         {
+            analyzeStarted = true;
+            timeToday = DateTime.Now;
+            wholeTime = DateTime.Now;
             if (capture == null)
             {
                 try
@@ -103,7 +119,24 @@ namespace PagesAndFaceEvaluator
             lock (processFrameMutex)
             {
                 if (!frameProcessing)
+                {
                     frameProcessing = true;
+                    counter++;
+                    if (counter % 10 == 0)
+                    {
+                        TimeSpan tmp = DateTime.Now - timeToday;
+                        double time = tmp.TotalMilliseconds / 1000.0;
+                        this.statisticTextBox.Text = time.ToString() + " s";
+
+                        double previousTime = 0;
+                        string text = this.wholeStatisticsTextBox.Text;
+                        string[] partsText = text.Split(' ');
+                        previousTime = double.Parse(partsText[0]);
+                        previousTime += time;
+                        this.wholeStatisticsTextBox.Text = previousTime.ToString() + " s";
+                        counter = 0;
+                    }
+                }
                 else
                     return;
             }
@@ -130,6 +163,17 @@ namespace PagesAndFaceEvaluator
         {
             if (tmr != null)
                 tmr.Stop();
+            if (analyzeStarted)
+            {
+                TimeSpan tmp = DateTime.Now - wholeTime;
+                double time = 0;
+                time += tmp.TotalMilliseconds / 1000.0;
+
+                string previousTime = (ConfigHelper.GetValue(ConfigHelper.ConfigKey.WholeTime.ToString()));
+                if (previousTime != "")
+                    time += double.Parse(previousTime);
+                ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.WholeTime.ToString(), time.ToString());
+            }
             Cursor.Current = Cursors.WaitCursor;
             for (; ; )
             {
