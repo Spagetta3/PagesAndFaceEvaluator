@@ -89,6 +89,7 @@
             // 
             this.statisticTextBox.Location = new System.Drawing.Point(153, 16);
             this.statisticTextBox.Name = "statisticTextBox";
+            this.statisticTextBox.ReadOnly = true;
             this.statisticTextBox.Size = new System.Drawing.Size(88, 20);
             this.statisticTextBox.TabIndex = 10;
             // 
@@ -96,6 +97,7 @@
             // 
             this.wholeStatisticsTextBox.Location = new System.Drawing.Point(153, 43);
             this.wholeStatisticsTextBox.Name = "wholeStatisticsTextBox";
+            this.wholeStatisticsTextBox.ReadOnly = true;
             this.wholeStatisticsTextBox.Size = new System.Drawing.Size(88, 20);
             this.wholeStatisticsTextBox.TabIndex = 11;
             // 
