@@ -161,8 +161,10 @@ namespace PagesAndFaceEvaluator
 
         private void StopButton_Click(object sender, EventArgs e)
         {
+
             if (tmr != null)
                 tmr.Stop();
+
             if (analyzeStarted)
             {
                 TimeSpan tmp = DateTime.Now - wholeTime;
@@ -172,14 +174,29 @@ namespace PagesAndFaceEvaluator
                 string previousTime = (ConfigHelper.GetValue(ConfigHelper.ConfigKey.WholeTime.ToString()));
                 if (previousTime != "")
                     time += double.Parse(previousTime);
+
+                if (tmp.TotalMinutes <= 30)
+                {
+                    DialogResult result = MessageBox.Show("Ešte neubehlo ani 30 minút. Naozaj si želáte skončiť?", "Upozornenie", MessageBoxButtons.YesNo);
+
+                    if (result == DialogResult.No)
+                    {
+                        tmr.Start();
+                        stopButton.Enabled = true;
+                        return;
+                    }
+                }
                 ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.WholeTime.ToString(), time.ToString());
             }
+
+            
             Cursor.Current = Cursors.WaitCursor;
             for (; ; )
             {
                 if (!frameProcessing)
                     break;
             }
+
             ReleaseData();
             //ak vypne program a chybaju tabData, tak to treba osetrit, ze sa to nestrati, ale ulozi sa to...
             //Statistics.Instance.WriteToFileData();
