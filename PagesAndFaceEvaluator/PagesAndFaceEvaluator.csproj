@@ -70,6 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIDsettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AIDsettings.Designer.cs">
+      <DependentUpon>AIDsettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="DetectFace.cs" />
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="LogsActionModule.cs" />
@@ -83,6 +89,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="TabActionModule.cs" />
+    <EmbeddedResource Include="AIDsettings.resx">
+      <DependentUpon>AIDsettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

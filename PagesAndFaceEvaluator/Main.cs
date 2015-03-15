@@ -26,12 +26,24 @@ namespace PagesAndFaceEvaluator
         private Timer tmr;
         private object processFrameMutex;
         private bool frameProcessing = false;
+        bool close = false;
 
         private Capture capture;
         
 
         public Main()
         {
+            string AID = ConfigHelper.GetValue(ConfigHelper.ConfigKey.AID.ToString());
+            if (AID == null || AID == "")
+            {
+                using (AIDsettings aidWindow = new AIDsettings())
+                {
+                    aidWindow.ShowDialog();
+                    if (aidWindow.DialogResult != DialogResult.OK)
+                        close = true;
+                }
+            }
+
             // run netsh.exe as admin and add: netsh http add urlacl url=http://+:8799/ user=Everyone
             NancyHost host;
             InitializeComponent();
@@ -49,7 +61,9 @@ namespace PagesAndFaceEvaluator
 
         private void Main_Load(object sender, EventArgs e)
         {
-
+            if (close)
+                this.Close();
+            return;
         }
 
         private void ProcessFrame()
