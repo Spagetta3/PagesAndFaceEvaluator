@@ -161,6 +161,7 @@ namespace PagesAndFaceEvaluator
 
         private void StopButton_Click(object sender, EventArgs e)
         {
+            stopButton.Enabled = false;
 
             if (tmr != null)
                 tmr.Stop();
@@ -207,6 +208,7 @@ namespace PagesAndFaceEvaluator
         private void startAnalyzeButton_Click(object sender, EventArgs e)
         {
             cameraSettingsButton.Enabled = false;
+            startAnalyzeButton.Enabled = false;
             StartAnalyze();
         }
 
