@@ -70,6 +70,9 @@
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.camImageBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CameraSettingsForm";
             this.Text = "CameraSettingsForm";
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).EndInit();

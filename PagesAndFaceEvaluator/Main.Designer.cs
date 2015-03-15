@@ -112,7 +112,11 @@
             this.Controls.Add(this.wholeStatisticsLabel);
             this.Controls.Add(this.statisticLabel);
             this.Controls.Add(this.stopButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Main";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Pages and Face evaluator";
             this.Load += new System.EventHandler(this.Main_Load);
             this.ResumeLayout(false);
