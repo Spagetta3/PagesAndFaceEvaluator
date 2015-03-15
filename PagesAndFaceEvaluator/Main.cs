@@ -106,23 +106,22 @@ namespace PagesAndFaceEvaluator
 
         private void DetectFaceInImageFrame(Image<Bgr, Byte> image)
         {
-                List<Rectangle> faces = new List<Rectangle>();
-                List<Rectangle> eyes = new List<Rectangle>();
-                DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
-
-
-                //foreach (Rectangle face in faces)
-                //    image.Draw(face, new Bgr(Color.Red), 2);
-
-                //foreach (Rectangle eye in eyes)
-                //    image.Draw(eye, new Bgr(Color.Blue), 2);
-                Statistics.Instance.AnalyzeDetectedFaceAndEyes(faces, eyes);
+            List<Rectangle> faces = new List<Rectangle>();
+            List<Rectangle> eyes = new List<Rectangle>();
+            DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
+            Statistics.Instance.AnalyzeDetectedFaceAndEyes(faces, eyes);
                 
-               return; 
+            return; 
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
+            tmr.Stop();
+            for (; ; )
+            {
+                if (!frameProcessing)
+                    break;
+            }
             ReleaseData();
             //ak vypne program a chybaju tabData, tak to treba osetrit, ze sa to nestrati, ale ulozi sa to...
             //Statistics.Instance.WriteToFileData();
