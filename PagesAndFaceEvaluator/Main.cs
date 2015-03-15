@@ -129,7 +129,8 @@ namespace PagesAndFaceEvaluator
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            tmr.Stop();
+            if (tmr != null)
+                tmr.Stop();
             Cursor.Current = Cursors.WaitCursor;
             for (; ; )
             {

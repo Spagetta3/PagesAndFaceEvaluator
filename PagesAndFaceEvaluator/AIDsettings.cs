@@ -19,9 +19,15 @@ namespace PagesAndFaceEvaluator
 
         private void setButton_Click(object sender, EventArgs e)
         {
-            if (aidTextBox.Text != "" || aidTextBox.Text != null)
-                ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.AID.ToString(), aidTextBox.Text);
-            this.DialogResult = DialogResult.OK;
+            if (aidTextBox.Text != "" && aidTextBox.Text != null)
+            {
+                bool status = ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.AID.ToString(), aidTextBox.Text);
+                if (status)
+                    this.DialogResult = DialogResult.OK;
+            }
+            else
+                this.DialogResult = DialogResult.Abort;
+
             this.Close();
         }
     }
