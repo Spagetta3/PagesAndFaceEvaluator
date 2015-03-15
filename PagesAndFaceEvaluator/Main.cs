@@ -128,13 +128,6 @@ namespace PagesAndFaceEvaluator
             this.Close();
             Application.Exit();
         }
-
-        private void WriteLine(string s)
-        {
-            outTextBox.Text += s + "\r\n";
-            outTextBox.SelectionStart = outTextBox.Text.Length;
-            outTextBox.ScrollToCaret();
-        }
     }
 
     public class MainMod: NancyModule
