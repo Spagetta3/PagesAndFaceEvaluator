@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecorderHelper.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="TabActionModule.cs" />
     <EmbeddedResource Include="AIDsettings.resx">

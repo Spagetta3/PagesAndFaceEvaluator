@@ -25,6 +25,9 @@ namespace PagesAndFaceEvaluator
         private double actualWholeTime = 0;
         private double actualFaceTime = 0;
         private double actualEyesTime = 0;
+        private DateTime timeOfLeave;
+        private bool madeRecord = false;
+        private bool isBack = false;
 
         private readonly string statisticsPath = "Statistics";
         private readonly string timesFileName = "times.txt";
@@ -38,16 +41,27 @@ namespace PagesAndFaceEvaluator
             instance = new Statistics();
         }
 
-        public void AnalyzeDetectedFaceAndEyes(List<Rectangle> faces, List<Rectangle> eyes)
+        public string AnalyzeDetectedFaceAndEyes(List<Rectangle> faces, List<Rectangle> eyes)
         {
+            bool isGone = false;
+
             if (faces.Count == 0 && faceDetected == true)
             {
+                timeOfLeave = DateTime.Now;
+                isBack = false;
                 TimeSpan tmp = DateTime.Now - faceDateTime;
                 faceTime += tmp.TotalMilliseconds / 1000.0;
                 faceDetected = false;
             }
             else if (faces.Count != 0 && faceDetected == false)
             {
+                if (madeRecord && isBack == false)
+                {
+                    isGone = false;
+                    isBack = true;
+                    madeRecord = false;
+                }
+                
                 if (firstDetectionOfFace)
                 {
                     wholeDateTime = DateTime.Now;
@@ -57,6 +71,23 @@ namespace PagesAndFaceEvaluator
                 else
                     faceDateTime = DateTime.Now;
                 faceDetected = true;
+            }
+            else if (faces.Count == 0 && faceDetected == false)
+            {
+                if (!firstDetectionOfFace)
+                {
+                    TimeSpan tmp = DateTime.Now - timeOfLeave;
+
+                    if (tmp.Seconds > 10 && madeRecord == false)
+                    {
+                        isGone = true;
+                        madeRecord = true;
+                    }
+                }
+            }
+            else if (faces.Count != 0 && faceDetected == true && isBack)
+            {
+                isBack = false;
             }
 
             if (eyes.Count == 0 && eyesDetected == true)
@@ -77,7 +108,12 @@ namespace PagesAndFaceEvaluator
                 eyesDetected = true;
             }
 
-            return;
+            if (isGone)
+                return "away";
+            else if (isBack)
+                return "back";
+            else
+                return "ok";
         }
 
         public void GetActualData()

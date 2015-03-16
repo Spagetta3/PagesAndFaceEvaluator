@@ -124,6 +124,7 @@ namespace PagesAndFaceEvaluator
                 {
                     frameProcessing = true;
                     counter++;
+
                     if (counter % 10 == 0)
                     {
                         TimeSpan tmp = DateTime.Now - timeToday;
@@ -156,7 +157,16 @@ namespace PagesAndFaceEvaluator
             List<Rectangle> faces = new List<Rectangle>();
             List<Rectangle> eyes = new List<Rectangle>();
             DetectFace.Detect(image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml", faces, eyes);
-            Statistics.Instance.AnalyzeDetectedFaceAndEyes(faces, eyes);
+            string result = Statistics.Instance.AnalyzeDetectedFaceAndEyes(faces, eyes);
+
+            if (result == "away")
+            {
+                RecorderHelper.MakeRecord(null, "o");
+            }
+            else if (result == "back")
+            {
+                RecorderHelper.MakeRecord(null, "p");
+            }
                 
             return; 
         }
@@ -190,8 +200,9 @@ namespace PagesAndFaceEvaluator
                     }
                 }
                 ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.WholeTime.ToString(), time.ToString());
-            }
 
+                RecorderHelper.MakeRecord(null, "e");
+            }
             
             Cursor.Current = Cursors.WaitCursor;
             for (; ; )
