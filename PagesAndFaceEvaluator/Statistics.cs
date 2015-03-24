@@ -31,6 +31,8 @@ namespace PagesAndFaceEvaluator
 
         private readonly string statisticsPath = "Statistics";
         private readonly string timesFileName = "times.txt";
+        private string lastPath;
+        private string aid;
 
         private Statistics()
         {
@@ -152,39 +154,6 @@ namespace PagesAndFaceEvaluator
             return;
         }
 
-        //public void WriteToFileData()
-        //{
-        //    TimeSpan tmp;
-
-        //    if (faceDetected)
-        //    {
-        //        tmp = DateTime.Now - faceDateTime;
-        //        faceTime += tmp.TotalMilliseconds / 1000.0;
-        //    }
-
-        //    if (eyesDetected)
-        //    {
-        //        tmp = DateTime.Now - eyesDateTime;
-        //        eyesTime += tmp.TotalMilliseconds / 1000.0;
-        //    }
-
-        //    if (!firstDetectionOfFace)
-        //    {
-        //        tmp = DateTime.Now - wholeDateTime;
-        //        wholeTime += tmp.TotalMilliseconds / 1000.0;
-        //    }
-
-        //    if (!Directory.Exists(statisticsPath))
-        //        Directory.CreateDirectory(statisticsPath);
-
-        //    string rowToWrite = "Face: " + faceTime.ToString() + " s; Eyes: " + eyesTime.ToString() + " s; Whole Time: " + wholeTime.ToString() +" s;";
-        //    using (StreamWriter w = File.AppendText(Path.Combine(statisticsPath, timesFileName)))
-        //    {
-        //        w.WriteLine(rowToWrite);
-        //        w.Flush();
-        //    }
-        //}
-
         public static Statistics Instance { get { return instance; } }
 
         public bool FaceDetected { get { return faceDetected; } set { faceDetected = value; } }
@@ -200,5 +169,7 @@ namespace PagesAndFaceEvaluator
         public double ActualWholeTime { get { return actualWholeTime; } set { actualWholeTime = value; } }
         public double ActualFaceTime { get { return actualFaceTime; } set { actualFaceTime = value; } }
         public double ActualEyesTime { get { return actualEyesTime; } set { actualEyesTime = value; } }
+        public string LastPath { get { return lastPath; } set { lastPath = value; } }
+        public string AID { get { return aid; } set { aid = value; } }
     }
 }

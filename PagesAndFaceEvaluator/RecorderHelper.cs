@@ -16,20 +16,15 @@ namespace PagesAndFaceEvaluator
             string path = requestSavePath;
 
             DateTime timeOfRequest = DateTime.Now;
-
-            string aid = ConfigHelper.GetValue(ConfigHelper.ConfigKey.AID.ToString());
-            {
-                if (aid != "")
-                    path += "/" + aid + "/";
-            }
+            
+            if (Statistics.Instance.AID != "")
+                path += "/" + Statistics.Instance.AID + "/";
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
             DateTime dateNow = DateTime.Now;
             string currentPath = path + dateNow.ToString("yyyy_MM_dd") + ".txt";
-
-            string lastPath = ConfigHelper.GetValue(ConfigHelper.ConfigKey.LastPath.ToString());
 
             if (option == "r" || option == "e")
             {
@@ -53,19 +48,18 @@ namespace PagesAndFaceEvaluator
 
                     string controlRequestUrl = url + ";" + action;
 
-                    if (lastPath != "" && lastPath == controlRequestUrl)
+                    if (Statistics.Instance.LastPath != "" && Statistics.Instance.LastPath == controlRequestUrl)
                         return true;
 
                     if (url == "menu" && action == "updated")
                         return true;
                 }
 
-                if (Statistics.Instance != null)
-                    Statistics.Instance.GetActualData();
+                Statistics.Instance.GetActualData();
 
-                if (lastPath != "")
+                if (Statistics.Instance.LastPath != "")
                 {
-                    string rowToWrite = lastPath + ";" + timeOfRequest + ";" + Statistics.Instance.ActualWholeTime + ";" + Statistics.Instance.ActualFaceTime + ";" + Statistics.Instance.ActualEyesTime + ";" + option;
+                    string rowToWrite = Statistics.Instance.LastPath + ";" + timeOfRequest + ";" + Statistics.Instance.ActualWholeTime + ";" + Statistics.Instance.ActualFaceTime + ";" + Statistics.Instance.ActualEyesTime + ";" + option;
                     using (StreamWriter w = File.AppendText(currentPath))
                     {
                         w.WriteLine(rowToWrite);
@@ -76,23 +70,20 @@ namespace PagesAndFaceEvaluator
                 if (url != "" && action != "")
                 {
                     string lastPathWithAction = url + ";" + action;
-                    if (ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.LastPath.ToString(), lastPathWithAction))
-                        return true;
-                    else
-                        return false;
+                    Statistics.Instance.LastPath = lastPathWithAction;
                 }
                 return true;
             }
             else
             {
-                if (lastPath != "")
+                if (Statistics.Instance.LastPath != "")
                 {
                     string rowToWrite;
 
                     if (option == "o")
-                        rowToWrite = lastPath + ";" + timeOfRequest + ";" + "0;" + "0;" + "0;" + option;
+                        rowToWrite = Statistics.Instance.LastPath + ";" + timeOfRequest + ";" + "0;" + "0;" + "0;" + option;
                     else
-                        rowToWrite = lastPath + ";" + timeOfRequest + ";" + "0;" + "0;" + "0;" + option;
+                        rowToWrite = Statistics.Instance.LastPath + ";" + timeOfRequest + ";" + "0;" + "0;" + "0;" + option;
 
                     using (StreamWriter w = File.AppendText(currentPath))
                     {

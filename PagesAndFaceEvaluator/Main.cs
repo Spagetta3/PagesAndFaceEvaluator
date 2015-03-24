@@ -37,18 +37,27 @@ namespace PagesAndFaceEvaluator
         
         public Main()
         {
-            string AID = ConfigHelper.GetValue(ConfigHelper.ConfigKey.AID.ToString());
-            if (AID == null || AID == "")
+            Statistics.Initialize();
+            Statistics.Instance.FaceDetected = false;
+            Statistics.Instance.EyesDetected = false;
+            Statistics.Instance.FirstDetectionOfFace = true;
+            Statistics.Instance.FirstDetectionOfEyes = true;
+
+            Statistics.Instance.AID = ConfigHelper.GetValue(ConfigHelper.ConfigKey.AID.ToString());
+            if (Statistics.Instance.AID == null || Statistics.Instance.AID == "")
             {
                 using (AIDsettings aidWindow = new AIDsettings())
                 {
                     aidWindow.ShowDialog();
                     if (aidWindow.DialogResult != DialogResult.OK)
+                    {
+                        MessageBox.Show("Nepodarilo sa zapísať AIS ID do configu", "Chyba");
                         close = true;
+                    }
                 }
             }
 
-            ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.LastPath.ToString(), "");
+            Statistics.Instance.LastPath = "";
 
             // run netsh.exe as admin and add: netsh http add urlacl url=http://+:8799/ user=Everyone
             NancyHost host;
@@ -57,12 +66,6 @@ namespace PagesAndFaceEvaluator
             string URL = "http://localhost:8799";
             host = new NancyHost(new Uri(URL));
             host.Start();
-
-            Statistics.Initialize();
-            Statistics.Instance.FaceDetected = false;
-            Statistics.Instance.EyesDetected = false;
-            Statistics.Instance.FirstDetectionOfFace = true;
-            Statistics.Instance.FirstDetectionOfEyes = true;
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -199,9 +202,19 @@ namespace PagesAndFaceEvaluator
                         return;
                     }
                 }
-                ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.WholeTime.ToString(), time.ToString());
 
                 RecorderHelper.MakeRecord(null, "e");
+
+                bool status = ConfigHelper.ChangeValue(ConfigHelper.ConfigKey.WholeTime.ToString(), time.ToString());
+
+                if (!status)
+                {
+                    MessageBox.Show("Nepodaril sa zapísať do configu čas", "Chyba");
+                    ReleaseData();
+                    this.Close();
+                    Application.Exit();
+                }
+
             }
             
             Cursor.Current = Cursors.WaitCursor;
@@ -213,7 +226,6 @@ namespace PagesAndFaceEvaluator
 
             ReleaseData();
             //ak vypne program a chybaju tabData, tak to treba osetrit, ze sa to nestrati, ale ulozi sa to...
-            //Statistics.Instance.WriteToFileData();
             this.Close();
             Application.Exit();
         }
