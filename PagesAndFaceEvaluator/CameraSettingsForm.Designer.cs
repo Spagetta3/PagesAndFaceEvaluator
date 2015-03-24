@@ -30,8 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.camImageBox = new Emgu.CV.UI.ImageBox();
-            this.okButton = new System.Windows.Forms.Button();
+            this.analyzeButton = new System.Windows.Forms.Button();
             this.infoLabel = new System.Windows.Forms.Label();
+            this.okButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.camImageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -43,15 +44,15 @@
             this.camImageBox.TabIndex = 2;
             this.camImageBox.TabStop = false;
             // 
-            // okButton
+            // analyzeButton
             // 
-            this.okButton.Location = new System.Drawing.Point(581, 428);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 3;
-            this.okButton.Text = "OK";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            this.analyzeButton.Location = new System.Drawing.Point(548, 428);
+            this.analyzeButton.Name = "analyzeButton";
+            this.analyzeButton.Size = new System.Drawing.Size(108, 23);
+            this.analyzeButton.TabIndex = 3;
+            this.analyzeButton.Text = "Znova analyzuj";
+            this.analyzeButton.UseVisualStyleBackColor = true;
+            this.analyzeButton.Click += new System.EventHandler(this.analyzeButton_Click);
             // 
             // infoLabel
             // 
@@ -62,13 +63,24 @@
             this.infoLabel.TabIndex = 4;
             this.infoLabel.Text = "Ak si vidíte celú tvár a okolo nej červený obdĺžnik, tak stlačte OK.";
             // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(467, 429);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 5;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
             // CameraSettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(668, 463);
-            this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.okButton);
+            this.Controls.Add(this.infoLabel);
+            this.Controls.Add(this.analyzeButton);
             this.Controls.Add(this.camImageBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -84,7 +96,8 @@
         #endregion
 
         private Emgu.CV.UI.ImageBox camImageBox;
-        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button analyzeButton;
         private System.Windows.Forms.Label infoLabel;
+        private System.Windows.Forms.Button okButton;
     }
 }

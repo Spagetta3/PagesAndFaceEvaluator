@@ -19,11 +19,9 @@ namespace PagesAndFaceEvaluator
 {
     public partial class CameraSettingsForm : Form
     {
-        private Timer tmr;
-        private object processFrameMutex;
-        private bool frameProcessing = false;
         private Capture capture;
-        private bool close = false;
+        private bool first = true;
+        private bool paused = false;
 
         public CameraSettingsForm()
         {
@@ -33,55 +31,30 @@ namespace PagesAndFaceEvaluator
 
         public void StartAnalyze()
         {
-            if (capture == null)
+            if (capture == null && first)
             {
                 try
                 {
                     capture = new Capture();
                 }
-                catch { }
-            }
-
-            if (capture != null)
-            {
-                processFrameMutex = new object();
-                frameProcessing = false;
-
-                tmr = new Timer();
-                tmr.Interval = 1500;
-                tmr.Elapsed += TimerElapsed;
-                tmr.Start();
-            }
-        }
-
-        private void TimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            if (!close)
-            {
-                lock (processFrameMutex)
+                catch
                 {
-                    if (!frameProcessing)
-                        frameProcessing = true;
-                    else
-                        return;
+                    MessageBox.Show("Nepodarilo sa spustiť kameru", "Chyba");
                 }
-
-                ProcessFrame();
-
-                lock (processFrameMutex)
-                {
-                    frameProcessing = false;
-                }
+                first = false;
             }
+
+            ProcessFrame();
         }
 
         private void ProcessFrame()
         {
-            if (!close)
-            {
-                Image<Bgr, byte> resultImage = DetectFaceInImageFrame(capture.QueryFrame());
-                ShowImage(resultImage);
-            }
+            if (paused)
+                capture.Start();
+            Image<Bgr, byte> resultImage = DetectFaceInImageFrame(capture.QueryFrame());
+            capture.Pause();
+            paused = true;
+            ShowImage(resultImage);
         }
 
         private void ShowImage(Image<Bgr, byte> resultImage)
@@ -104,20 +77,20 @@ namespace PagesAndFaceEvaluator
             return image;
         }
 
+        private void analyzeButton_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            this.Enabled = false;
+            StartAnalyze();
+            this.Enabled = true;
+        }
+
         private void okButton_Click(object sender, EventArgs e)
         {
-            close = true;
-
-            if (tmr != null)
-                tmr.Stop();
-
             Cursor.Current = Cursors.WaitCursor;
+            this.Enabled = false;
 
-            for (; ; )
-            {
-                if (!frameProcessing)
-                    break;
-            }
+            capture.Stop();
 
             if (capture != null)
                 capture.Dispose();
