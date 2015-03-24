@@ -68,7 +68,6 @@
             this.Controls.Add(this.setButton);
             this.Controls.Add(this.aidTextBox);
             this.Controls.Add(this.aidLabel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AIDsettings";
